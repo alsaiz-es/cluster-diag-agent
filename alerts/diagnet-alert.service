@@ -1,0 +1,5 @@
+[Unit]
+Description=Resumen periódico DiagNet/VmWatch (últimos 15 minutos)
+[Service]
+Type=oneshot
+ExecStart=/opt/css_diag_agent/alerts/diagnet_alert.sh

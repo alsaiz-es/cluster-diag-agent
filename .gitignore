@@ -1,0 +1,21 @@
+# Logs and runtime artifacts
+*.log
+*.pcap
+*.sadc
+*.tgz
+*.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Claude Code
+.claude/
+CLAUDE.local.md
