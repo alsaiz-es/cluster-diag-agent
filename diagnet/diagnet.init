@@ -14,10 +14,10 @@ DAEMON="/opt/css_diag_agent/diagnet/diagnet.sh"
 
 start() {
     if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-        echo "$NAME ya está en ejecución."
+        echo "$NAME is already running."
         return 0
     fi
-    echo "Iniciando $NAME..."
+    echo "Starting $NAME..."
     ulimit -n 65536 2>/dev/null || true
     nohup "$DAEMON" >> /var/log/css_diag_agent/diagnet_daemon.log 2>&1 &
     echo $! > "$PIDFILE"
@@ -25,19 +25,19 @@ start() {
 
 stop() {
     if [ ! -f "$PIDFILE" ] || ! kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-        echo "$NAME no está en ejecución."
+        echo "$NAME is not running."
         return 0
     fi
-    echo "Parando $NAME..."
+    echo "Stopping $NAME..."
     kill "$(cat "$PIDFILE")"
     rm -f "$PIDFILE"
 }
 
 status() {
     if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-        echo "$NAME en ejecución (PID $(cat "$PIDFILE"))"
+        echo "$NAME running (PID $(cat "$PIDFILE"))"
     else
-        echo "$NAME parado"
+        echo "$NAME stopped"
         return 1
     fi
 }
@@ -47,5 +47,5 @@ case "$1" in
     stop)    stop ;;
     restart) stop; sleep 1; start ;;
     status)  status ;;
-    *)       echo "Uso: $0 {start|stop|restart|status}"; exit 1 ;;
+    *)       echo "Usage: $0 {start|stop|restart|status}"; exit 1 ;;
 esac

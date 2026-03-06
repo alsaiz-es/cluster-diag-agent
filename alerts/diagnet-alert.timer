@@ -1,5 +1,5 @@
 [Unit]
-Description=Programador de resumen DiagNet/VmWatch cada 5 minutos
+Description=DiagNet/VmWatch summary scheduler every 5 minutes
 [Timer]
 OnBootSec=2min
 OnUnitActiveSec=5min

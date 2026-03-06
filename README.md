@@ -117,9 +117,9 @@ Event types: `PING_OK`, `PING_FAIL`, `PING_SLOW_TRIGGER`, `TCP_OK`, `TCP_FAIL`, 
 
 ## Requirements
 
-- Linux with systemd
-- Bash 4+, coreutils, iputils (ping)
-- Python 3 (echo server only)
+- Linux with systemd or SysV init (auto-detected)
+- Bash 3.x+, coreutils, iputils (ping), nc (netcat)
+- Python 2.4+ or 3.x (echo server only)
 - Optional: tcpdump, sysstat (sar)
 
 ## License

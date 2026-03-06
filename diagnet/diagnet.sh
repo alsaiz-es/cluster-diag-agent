@@ -8,8 +8,8 @@ LOG_DIR="${LOG_DIR:-/var/log/css_diag_agent}"; mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/diagnet.log"; touch "$LOG_FILE"
 PERIOD_SEC="${PERIOD_SEC:-5}"; PING_THRESH_MS="${PING_THRESH_MS:-50}"; TCP_THRESH_MS="${TCP_THRESH_MS:-300}"; ECHO_THRESH_MS="${ECHO_THRESH_MS:-500}"; DNS_THRESH_MS="${DNS_THRESH_MS:-200}"; TRIGGER_COOLDOWN_SEC="${TRIGGER_COOLDOWN_SEC:-300}"
 DNS_TARGETS="${DNS_TARGETS:-}"; read -ra _DNS_TARGETS <<< "$DNS_TARGETS"
-# PEER_IPS: obligatorio desde el conf
-if [[ -z "${PEER_IPS+x}" ]]; then echo "ERROR: PEER_IPS no definido. Editar $CONF" >&2; exit 1; fi
+# PEER_IPS: required from conf
+if [[ -z "${PEER_IPS+x}" ]]; then echo "ERROR: PEER_IPS not defined. Edit $CONF" >&2; exit 1; fi
 read -ra PEER_IPS <<< "$PEER_IPS"
 PEER_PORT="${PEER_PORT:-9400}"
 SNAPSHOT="${SNAPSHOT_SCRIPT:-${BASE}/vmwatch/snapshot.sh}"; TCPDUMP_SCRIPT="${TCPDUMP_SCRIPT:-${BASE}/vmwatch/tcpdump.sh}"

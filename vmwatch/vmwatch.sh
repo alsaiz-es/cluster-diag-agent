@@ -3,9 +3,9 @@ set -euo pipefail
 BASE="/opt/css_diag_agent"
 CONF="${DIAGNET_CONF:-${BASE}/diagnet.conf}"
 [[ -f "$CONF" ]] && source "$CONF"
-# PEER_IPS: obligatorio desde el conf
+# PEER_IPS: required from conf
 PEER_PORT="${PEER_PORT:-9400}"
-if [[ -z "${PEER_IPS+x}" ]]; then echo "ERROR: PEER_IPS no definido. Editar $CONF" >&2; exit 1; fi
+if [[ -z "${PEER_IPS+x}" ]]; then echo "ERROR: PEER_IPS not defined. Edit $CONF" >&2; exit 1; fi
 read -ra _ips <<< "$PEER_IPS"; PEERS=(); for _ip in "${_ips[@]}"; do PEERS+=("${_ip}:${PEER_PORT}"); done
 LOG_DIR="${LOG_DIR:-/var/log/css_diag_agent}"
 SNAPSHOT="${SNAPSHOT_SCRIPT:-${BASE}/vmwatch/snapshot.sh}"

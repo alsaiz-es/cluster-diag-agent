@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Instalador unificado css_diag_agent
-# Uso: ./install.sh [--all | --diagnet | --vmwatch | --alerts | --status | --uninstall]
-#   Sin argumentos equivale a --all
-# Compatible con systemd e init.d (detección automática)
+# Unified installer for css_diag_agent
+# Usage: ./install.sh [--all | --diagnet | --vmwatch | --alerts | --status | --uninstall]
+#   No arguments defaults to --all
+# Compatible with systemd and init.d (auto-detection)
 
 BASE="/opt/css_diag_agent"
 LOG_DIR="/var/log/css_diag_agent"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Detectar init system
+# Detect init system
 if command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
   INIT_SYS="systemd"
 else
@@ -19,17 +19,17 @@ fi
 
 mkdir -p "$BASE" "$LOG_DIR"
 
-# Instalar conf solo si no existe (no machacar configuración del usuario)
+# Install conf only if it does not exist (do not overwrite user configuration)
 if [[ ! -f "$BASE/diagnet.conf" ]]; then
   install -m 0644 "${SCRIPT_DIR}/diagnet.conf" "$BASE/diagnet.conf"
-  echo "Configuración instalada en $BASE/diagnet.conf — editar según entorno."
+  echo "Configuration installed at $BASE/diagnet.conf — edit for your environment."
 else
-  echo "Configuración existente en $BASE/diagnet.conf — no se sobreescribe."
+  echo "Existing configuration at $BASE/diagnet.conf — not overwritten."
 fi
 
-echo "Init system detectado: $INIT_SYS"
+echo "Init system detected: $INIT_SYS"
 
-# --- Funciones systemd ---
+# --- systemd functions ---
 
 systemd_install_diagnet() {
   install -m 0644 "${SCRIPT_DIR}/diagnet/echo_server.service" /etc/systemd/system/
@@ -59,7 +59,7 @@ systemd_status() {
     if systemctl is-enabled "$unit" 2>/dev/null | grep -q enabled; then
       systemctl is-active "$unit" 2>/dev/null || true
     else
-      echo "no instalado"
+      echo "not installed"
     fi
   done
 }
@@ -72,7 +72,7 @@ systemd_uninstall() {
   systemctl daemon-reload
 }
 
-# --- Funciones init.d ---
+# --- init.d functions ---
 
 initd_install_svc() {
   local src="$1" name="$2"
@@ -106,14 +106,14 @@ initd_status() {
     if [ -x "/etc/init.d/${svc}" ]; then
       "/etc/init.d/${svc}" status 2>/dev/null || true
     else
-      echo "no instalado"
+      echo "not installed"
     fi
   done
   printf "  %-28s " "css-diagnet-alert (cron)"
   if [ -f /etc/cron.d/css-diagnet-alert ]; then
-    echo "instalado"
+    echo "installed"
   else
-    echo "no instalado"
+    echo "not installed"
   fi
 }
 
@@ -132,7 +132,7 @@ initd_uninstall() {
   rm -f /etc/cron.d/css-diagnet-alert
 }
 
-# --- Funciones comunes de instalación ---
+# --- Common install functions ---
 
 install_diagnet() {
   local D="$BASE/diagnet"; mkdir -p "$D"
@@ -140,7 +140,7 @@ install_diagnet() {
   install -m 0755 "${SCRIPT_DIR}/diagnet/echo_server.py"    "$D/"
   install -m 0755 "${SCRIPT_DIR}/diagnet/diagnet_report.sh" "$D/"
   "${INIT_SYS}_install_diagnet"
-  echo "DiagNet instalado. Echo en :$(grep -oP 'PEER_PORT=\K[0-9]+' "$BASE/diagnet.conf" 2>/dev/null || echo 9400) y sondas activas."
+  echo "DiagNet installed. Echo on :$(grep -oP 'PEER_PORT=\K[0-9]+' "$BASE/diagnet.conf" 2>/dev/null || echo 9400) and probes active."
 }
 
 install_vmwatch() {
@@ -149,30 +149,30 @@ install_vmwatch() {
   install -m 0755 "${SCRIPT_DIR}/vmwatch/snapshot.sh"  "$D/"
   install -m 0755 "${SCRIPT_DIR}/vmwatch/tcpdump.sh"   "$D/"
   "${INIT_SYS}_install_vmwatch"
-  echo "VMWatch instalado."
+  echo "VMWatch installed."
 }
 
 install_alerts() {
   local D="$BASE/alerts"; mkdir -p "$D"
   install -m 0755 "${SCRIPT_DIR}/alerts/diagnet_alert.sh" "$D/"
   "${INIT_SYS}_install_alerts"
-  echo "Alertas instaladas (cada 5 min)."
+  echo "Alerts installed (every 5 min)."
 }
 
 show_status() {
-  echo "=== css_diag_agent — estado ($INIT_SYS) ==="
-  echo "Conf: $BASE/diagnet.conf $([ -f "$BASE/diagnet.conf" ] && echo '[OK]' || echo '[NO EXISTE]')"
+  echo "=== css_diag_agent — status ($INIT_SYS) ==="
+  echo "Conf: $BASE/diagnet.conf $([ -f "$BASE/diagnet.conf" ] && echo '[OK]' || echo '[MISSING]')"
   echo "Logs: $LOG_DIR"
   echo
   "${INIT_SYS}_status"
 }
 
 do_uninstall() {
-  echo "Parando y deshabilitando servicios ($INIT_SYS)..."
+  echo "Stopping and disabling services ($INIT_SYS)..."
   "${INIT_SYS}_uninstall"
-  echo "Servicios eliminados."
-  echo "Binarios en $BASE y logs en $LOG_DIR NO se borran (por seguridad)."
-  echo "Para eliminar completamente: rm -rf $BASE $LOG_DIR"
+  echo "Services removed."
+  echo "Binaries in $BASE and logs in $LOG_DIR are NOT deleted (for safety)."
+  echo "To remove completely: rm -rf $BASE $LOG_DIR"
 }
 
 MODE="${1:---all}"
@@ -183,8 +183,8 @@ case "$MODE" in
   --alerts)    install_alerts ;;
   --status)    show_status; exit 0 ;;
   --uninstall) do_uninstall; exit 0 ;;
-  *)           echo "Uso: $0 [--all | --diagnet | --vmwatch | --alerts | --status | --uninstall]"; exit 1 ;;
+  *)           echo "Usage: $0 [--all | --diagnet | --vmwatch | --alerts | --status | --uninstall]"; exit 1 ;;
 esac
 
-echo "Logs en: $LOG_DIR"
-echo "Conf en: $BASE/diagnet.conf"
+echo "Logs at: $LOG_DIR"
+echo "Conf at: $BASE/diagnet.conf"

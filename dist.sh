@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Genera tarball de distribución css_diag_agent-VERSION.tar.gz
+# Generate distribution tarball css_diag_agent-VERSION.tar.gz
 VERSION="${1:-$(date +%Y%m%d)}"
 NAME="css_diag_agent-${VERSION}"
 OUTDIR="dist"
@@ -10,7 +10,7 @@ trap 'rm -rf "$TMPDIR_DIST"' EXIT
 
 mkdir -p "$OUTDIR" "${TMPDIR_DIST}/${NAME}"
 
-# Copiar solo los ficheros necesarios
+# Copy only the necessary files
 cp install.sh diagnet.conf LICENSE README.md "${TMPDIR_DIST}/${NAME}/"
 cp -R diagnet/ "${TMPDIR_DIST}/${NAME}/diagnet"
 cp -R vmwatch/ "${TMPDIR_DIST}/${NAME}/vmwatch"
