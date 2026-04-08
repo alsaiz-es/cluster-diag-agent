@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Generate distribution tarball css_diag_agent-VERSION.tar.gz
+# Generate distribution tarball cluster_diag_agent-VERSION.tar.gz
 VERSION="${1:-$(date +%Y%m%d)}"
-NAME="css_diag_agent-${VERSION}"
+NAME="cluster_diag_agent-${VERSION}"
 OUTDIR="dist"
 TMPDIR_DIST=$(mktemp -d)
 trap 'rm -rf "$TMPDIR_DIST"' EXIT

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
-BASE="/opt/css_diag_agent"
+BASE="/opt/cluster_diag_agent"
 CONF="${DIAGNET_CONF:-${BASE}/diagnet.conf}"
 [[ -f "$CONF" ]] && source "$CONF"
-LOG_DIR="${LOG_DIR:-/var/log/css_diag_agent}"
+LOG_DIR="${LOG_DIR:-/var/log/cluster_diag_agent}"
 WINDOW="${DIAGNOSTIC_WINDOW_MIN:-15}"
 NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 SINCE=$(date -u -d "-${WINDOW} min" +%Y-%m-%dT%H:%M:%SZ)

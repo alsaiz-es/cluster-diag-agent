@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -uo pipefail
-OUTDIR="${1:-/var/log/css_diag_agent}"; HOST="${2:-$(hostname -s || echo unknown)}"; ARG3="${3:-}"; ARG4="${4:-}"; REASON="${5:-manual}"
+OUTDIR="${1:-/var/log/cluster_diag_agent}"; HOST="${2:-$(hostname -s || echo unknown)}"; ARG3="${3:-}"; ARG4="${4:-}"; REASON="${5:-manual}"
 TS="$(date -u +%Y%m%dT%H%M%SZ)"; SNAPDIR="${OUTDIR}/snapshot_${HOST}_${TS}"; TXT="${SNAPDIR}/snapshot.txt"
 mkdir -p "$SNAPDIR"; exec > >(tee -a "$TXT") 2>&1
 hr(){ printf -- "------------------------------------------------------------\n"; }; sec(){ echo "== $* =="; }

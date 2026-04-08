@@ -1,6 +1,6 @@
 #!/bin/bash
 ### BEGIN INIT INFO
-# Provides:          css-vmwatch
+# Provides:          cluster-vmwatch
 # Required-Start:    $network $remote_fs
 # Required-Stop:     $network $remote_fs
 # Default-Start:     2 3 4 5
@@ -8,9 +8,9 @@
 # Description:       VM Watch (synthetic jitter/net/disk)
 ### END INIT INFO
 
-NAME="css-vmwatch"
+NAME="cluster-vmwatch"
 PIDFILE="/var/run/${NAME}.pid"
-DAEMON="/opt/css_diag_agent/vmwatch/vmwatch.sh"
+DAEMON="/opt/cluster_diag_agent/vmwatch/vmwatch.sh"
 
 start() {
     if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
@@ -19,7 +19,7 @@ start() {
     fi
     echo "Starting $NAME..."
     ulimit -n 65536 2>/dev/null || true
-    nohup "$DAEMON" >> /var/log/css_diag_agent/vmwatch_daemon.log 2>&1 &
+    nohup "$DAEMON" >> /var/log/cluster_diag_agent/vmwatch_daemon.log 2>&1 &
     echo $! > "$PIDFILE"
 }
 

@@ -1,6 +1,6 @@
-# css_diag_agent
+# cluster-diag-agent
 
-Lightweight diagnostic toolkit for monitoring network and VM health across Linux clusters. Pure Bash + one Python echo server — no heavy dependencies.
+Lightweight Bash toolkit to detect network micro-outages, DNS failures and scheduling jitter in virtualized Linux clusters.
 
 Designed to detect and capture evidence of intermittent infrastructure issues: network micro-outages, scheduling jitter from noisy neighbors, DNS resolution failures, and disk I/O stalls.
 
@@ -64,16 +64,16 @@ The installer auto-detects the init system and adapts accordingly:
 
 | Script | Description |
 |---|---|
-| `css-echo-server` | TCP echo server (uses python3/python2.6/python auto-detection) |
-| `css-diagnet` | Continuous probe loop |
-| `css-vmwatch` | Jitter + net + disk heartbeat loop |
-| `css-diagnet-alert` (cron) | Alert summary every 5 min via `/etc/cron.d/` |
+| `cluster-echo-server` | TCP echo server (uses python3/python2.6/python auto-detection) |
+| `cluster-diagnet` | Continuous probe loop |
+| `cluster-vmwatch` | Jitter + net + disk heartbeat loop |
+| `cluster-diagnet-alert` (cron) | Alert summary every 5 min via `/etc/cron.d/` |
 
 All init.d scripts support `start`, `stop`, `restart`, and `status` commands.
 
 ## Configuration
 
-All settings live in `diagnet.conf`, sourced by every script. The installer copies it to `/opt/css_diag_agent/diagnet.conf` only if no config exists yet.
+All settings live in `diagnet.conf`, sourced by every script. The installer copies it to `/opt/cluster_diag_agent/diagnet.conf` only if no config exists yet.
 
 ```bash
 # Required — space-separated peer IPs
@@ -106,7 +106,7 @@ DIAGNOSTIC_WINDOW_MIN=15
 ## Directory layout
 
 ```
-/opt/css_diag_agent/
+/opt/cluster_diag_agent/
 ├── diagnet.conf
 ├── diagnet/
 │   ├── diagnet.sh            # probe loop
@@ -128,7 +128,7 @@ DIAGNOSTIC_WINDOW_MIN=15
     ├── diagnet-alert.timer    # systemd timer
     └── diagnet-alert.cron     # cron alternative
 
-/var/log/css_diag_agent/
+/var/log/cluster_diag_agent/
 ├── diagnet.log                # probe results (auto-rotates at 50MB)
 ├── vmwatch.log                # heartbeats and events
 ├── alerts.log                 # periodic summaries

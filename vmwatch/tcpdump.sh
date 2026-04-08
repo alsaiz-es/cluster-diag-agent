@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-OUTDIR="${1:-/var/log/css_diag_agent}"; shift || true; PEERS="${*:-}"; mkdir -p "$OUTDIR"
+OUTDIR="${1:-/var/log/cluster_diag_agent}"; shift || true; PEERS="${*:-}"; mkdir -p "$OUTDIR"
 LOCK="$OUTDIR/tcpdump.lock"; now=$(date +%s); if [[ -f "$LOCK" ]] && (( now - $(stat -c %Y "$LOCK" 2>/dev/null || echo 0) < 300 )); then exit 0; fi; echo $now > "$LOCK"
 FILTER=""; for p in $PEERS; do ip="${p%%:*}"; port="${p##*:}"; [[ -n "$FILTER" ]] && FILTER="${FILTER} or "; FILTER="${FILTER}(host ${ip} and port ${port})"; done; [[ -z "$FILTER" ]] && FILTER="tcp"
 TS="$(date -u +%Y%m%dT%H%M%SZ)"; PCAP="${OUTDIR}/pcap_${TS}.pcap"

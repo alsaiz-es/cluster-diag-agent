@@ -4,7 +4,7 @@ After=network-online.target
 Wants=network-online.target
 [Service]
 Type=simple
-ExecStart=/opt/css_diag_agent/vmwatch/vmwatch.sh
+ExecStart=/opt/cluster_diag_agent/vmwatch/vmwatch.sh
 Restart=always
 RestartSec=5s
 User=root

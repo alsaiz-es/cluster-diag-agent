@@ -1,6 +1,6 @@
 #!/bin/bash
 ### BEGIN INIT INFO
-# Provides:          css-echo-server
+# Provides:          cluster-echo-server
 # Required-Start:    $network $remote_fs
 # Required-Stop:     $network $remote_fs
 # Default-Start:     2 3 4 5
@@ -8,14 +8,14 @@
 # Description:       Synthetic TCP Echo Server
 ### END INIT INFO
 
-NAME="css-echo-server"
-CONF="/opt/css_diag_agent/diagnet.conf"
+NAME="cluster-echo-server"
+CONF="/opt/cluster_diag_agent/diagnet.conf"
 PIDFILE="/var/run/${NAME}.pid"
-LOGFILE="/var/log/css_diag_agent/echo_server.log"
+LOGFILE="/var/log/cluster_diag_agent/echo_server.log"
 
 [ -f "$CONF" ] && . "$CONF"
 DAEMON="$(command -v python3 2>/dev/null || command -v python2.6 2>/dev/null || command -v python 2>/dev/null || echo python)"
-DAEMON_ARGS="/opt/css_diag_agent/diagnet/echo_server.py --bind 0.0.0.0 --port ${PEER_PORT:-9400}"
+DAEMON_ARGS="/opt/cluster_diag_agent/diagnet/echo_server.py --bind 0.0.0.0 --port ${PEER_PORT:-9400}"
 
 start() {
     if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then

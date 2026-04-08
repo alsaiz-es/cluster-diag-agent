@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-BASE="/opt/css_diag_agent"
+BASE="/opt/cluster_diag_agent"
 CONF="${DIAGNET_CONF:-${BASE}/diagnet.conf}"
 [[ -f "$CONF" ]] && source "$CONF"
 HOSTNAME="$(hostname -s || echo unknown)"
-LOG_DIR="${LOG_DIR:-/var/log/css_diag_agent}"; mkdir -p "$LOG_DIR"
+LOG_DIR="${LOG_DIR:-/var/log/cluster_diag_agent}"; mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/diagnet.log"; touch "$LOG_FILE"
 PERIOD_SEC="${PERIOD_SEC:-5}"; PING_THRESH_MS="${PING_THRESH_MS:-50}"; TCP_THRESH_MS="${TCP_THRESH_MS:-300}"; ECHO_THRESH_MS="${ECHO_THRESH_MS:-500}"; DNS_THRESH_MS="${DNS_THRESH_MS:-200}"; TRIGGER_COOLDOWN_SEC="${TRIGGER_COOLDOWN_SEC:-300}"
 DNS_TARGETS="${DNS_TARGETS:-}"; read -ra _DNS_TARGETS <<< "$DNS_TARGETS"

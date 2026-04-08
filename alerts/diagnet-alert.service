@@ -2,4 +2,4 @@
 Description=DiagNet/VmWatch periodic summary (last 15 minutes)
 [Service]
 Type=oneshot
-ExecStart=/opt/css_diag_agent/alerts/diagnet_alert.sh
+ExecStart=/opt/cluster_diag_agent/alerts/diagnet_alert.sh

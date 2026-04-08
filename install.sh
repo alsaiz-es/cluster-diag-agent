@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Unified installer for css_diag_agent
+# Unified installer for cluster_diag_agent
 # Usage: ./install.sh [--all | --diagnet | --vmwatch | --alerts | --status | --uninstall]
 #   No arguments defaults to --all
 # Compatible with systemd and init.d (auto-detection)
 
-BASE="/opt/css_diag_agent"
-LOG_DIR="/var/log/css_diag_agent"
+BASE="/opt/cluster_diag_agent"
+LOG_DIR="/var/log/cluster_diag_agent"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Detect init system
@@ -87,20 +87,20 @@ initd_install_svc() {
 }
 
 initd_install_diagnet() {
-  initd_install_svc "${SCRIPT_DIR}/diagnet/echo_server.init" "css-echo-server"
-  initd_install_svc "${SCRIPT_DIR}/diagnet/diagnet.init" "css-diagnet"
+  initd_install_svc "${SCRIPT_DIR}/diagnet/echo_server.init" "cluster-echo-server"
+  initd_install_svc "${SCRIPT_DIR}/diagnet/diagnet.init" "cluster-diagnet"
 }
 
 initd_install_vmwatch() {
-  initd_install_svc "${SCRIPT_DIR}/vmwatch/vmwatch.init" "css-vmwatch"
+  initd_install_svc "${SCRIPT_DIR}/vmwatch/vmwatch.init" "cluster-vmwatch"
 }
 
 initd_install_alerts() {
-  install -m 0644 "${SCRIPT_DIR}/alerts/diagnet-alert.cron" /etc/cron.d/css-diagnet-alert
+  install -m 0644 "${SCRIPT_DIR}/alerts/diagnet-alert.cron" /etc/cron.d/cluster-diagnet-alert
 }
 
 initd_status() {
-  local svcs=(css-echo-server css-diagnet css-vmwatch)
+  local svcs=(cluster-echo-server cluster-diagnet cluster-vmwatch)
   for svc in "${svcs[@]}"; do
     printf "  %-28s " "$svc"
     if [ -x "/etc/init.d/${svc}" ]; then
@@ -109,8 +109,8 @@ initd_status() {
       echo "not installed"
     fi
   done
-  printf "  %-28s " "css-diagnet-alert (cron)"
-  if [ -f /etc/cron.d/css-diagnet-alert ]; then
+  printf "  %-28s " "cluster-diagnet-alert (cron)"
+  if [ -f /etc/cron.d/cluster-diagnet-alert ]; then
     echo "installed"
   else
     echo "not installed"
@@ -118,7 +118,7 @@ initd_status() {
 }
 
 initd_uninstall() {
-  for svc in css-diagnet css-echo-server css-vmwatch; do
+  for svc in cluster-diagnet cluster-echo-server cluster-vmwatch; do
     if [ -x "/etc/init.d/${svc}" ]; then
       "/etc/init.d/${svc}" stop 2>/dev/null || true
       if command -v update-rc.d >/dev/null 2>&1; then
@@ -129,7 +129,7 @@ initd_uninstall() {
       rm -f "/etc/init.d/${svc}"
     fi
   done
-  rm -f /etc/cron.d/css-diagnet-alert
+  rm -f /etc/cron.d/cluster-diagnet-alert
 }
 
 # --- Common install functions ---
@@ -160,7 +160,7 @@ install_alerts() {
 }
 
 show_status() {
-  echo "=== css_diag_agent — status ($INIT_SYS) ==="
+  echo "=== cluster_diag_agent — status ($INIT_SYS) ==="
   echo "Conf: $BASE/diagnet.conf $([ -f "$BASE/diagnet.conf" ] && echo '[OK]' || echo '[MISSING]')"
   echo "Logs: $LOG_DIR"
   echo
